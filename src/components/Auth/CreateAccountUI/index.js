@@ -1,16 +1,16 @@
 "use client";
 import React, { useState } from "react";
 import { useAuth } from "../../Auth";
-const Login = () => {
+const CreateAccount = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { login, isLoggedIn } = useAuth();
-  const handleLogin = () => {
-    login(username, password);
+  const { signup, isLoggedIn } = useAuth();
+  const handleSignup = () => {
+    signup(username, password);
   };
   return (
     <div>
-      <h1>Login Page</h1>
+      <h1>Create Account Page</h1>
       <input
         type="text"
         placeholder="Username"
@@ -23,13 +23,13 @@ const Login = () => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <button onClick={handleLogin}>Login</button>
+      <button onClick={handleSignup}>Create Account</button>
       {isLoggedIn() ? (
-        <p>You are logged in!</p>
+        <p>You have successfully created an account and logged in!</p>
       ) : (
-        <p>Please login to continue</p>
+        <p>Please create an account to continue</p>
       )}
     </div>
   );
 };
-export default Login;
+export default CreateAccount;
