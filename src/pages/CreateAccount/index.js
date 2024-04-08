@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import "./index.css";
 
-export default function Login() {
+export default function CreateAccount() {
   const [loginStatus, setLoginStatus] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -17,7 +16,7 @@ export default function Login() {
       setErrorMessage("");
     }
     try {
-      const response = await fetch("/api/login", {
+      const response = await fetch("/api/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -31,9 +30,9 @@ export default function Login() {
         console.log("OK");
       } else {
         // Handle errors
-        console.error("Login failed");
+        console.error("Signup failed");
         setErrorMessage(
-          "Your login information is incorrect. Do you have an account?",
+          "Your signup information is incorrect. Our team is working on a fix.",
         );
       }
     } catch (error) {
@@ -42,7 +41,7 @@ export default function Login() {
   };
   return (
     <div className="login-container">
-      <h1>Login Here!</h1>
+      <h1>Signup Here!</h1>
       <div className="login-status">
         {loginStatus ? "Logged in" : "Not logged in"}
       </div>
@@ -65,7 +64,7 @@ export default function Login() {
       </button>
       <div className="error-message">{errorMessage}</div>
       <button className="login-button">
-        <Link href="/CreateAccount">Signup</Link>
+        <Link href="/Login">Login</Link>
       </button>
     </div>
   );

@@ -5,11 +5,14 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <h1>Hello</h1>
-      <button class="button">
-      <Link href="/">Main</Link>
+      <button className="button">
+        <Link href="/">Main</Link>
       </button>
-      <button class="button">
-      <Link href="/Login">Login</Link>
+      <button className="button">
+        <Link href="/Login">Login</Link>
+      </button>
+      <button className="button">
+        <Link href="/CreateAccount">Signup</Link>
       </button>
     </main>
   );
