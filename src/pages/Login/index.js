@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import "./index.css";
 
@@ -9,6 +10,15 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const router = useRouter();
+  useEffect(() => {
+    if (loginStatus) {
+      setTimeout(() => {
+        router.push("/");
+      }, 2000);
+    }
+  }, [loginStatus, router]);
+
   const handleLogin = async () => {
     if (username === "" || password === "") {
       setErrorMessage("Please fill out the fields.");
@@ -44,22 +54,26 @@ export default function Login() {
     <div className="login-container">
       <h1>Login Here!</h1>
       <div className="login-status">
-        {loginStatus ? "Logged in" : "Not logged in"}
+        <p>{loginStatus ? "Logged in. You will be redirected shortly." : ""}</p>
       </div>
-      <input
-        className="login-input"
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        className="login-input"
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+      <div>
+        <input
+          className="login-input"
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+      </div>
+      <div>
+        <input
+          className="login-input"
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      </div>
       <button className="login-button" onClick={handleLogin}>
         Login
       </button>

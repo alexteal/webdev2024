@@ -1,13 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import Link from "next/link";
+import "./index.css";
 
 export default function CreateAccount() {
   const [loginStatus, setLoginStatus] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const router = useRouter();
+  useEffect(() => {
+    if (loginStatus) {
+      setTimeout(() => {
+        router.push("/");
+      }, 2000);
+    }
+  }, [loginStatus, router]);
+
   const handleLogin = async () => {
     if (username === "" || password === "") {
       setErrorMessage("Please fill out the fields.");
@@ -31,9 +42,7 @@ export default function CreateAccount() {
       } else {
         // Handle errors
         console.error("Signup failed");
-        setErrorMessage(
-          "Your signup information is incorrect. Our team is working on a fix.",
-        );
+        setErrorMessage("Our signup process failed. We're working on a fix.");
       }
     } catch (error) {
       console.error("An error occurred during login:", error);
@@ -43,7 +52,7 @@ export default function CreateAccount() {
     <div className="login-container">
       <h1>Signup Here!</h1>
       <div className="login-status">
-        {loginStatus ? "Logged in" : "Not logged in"}
+        {loginStatus ? "Logged in. You will be redirected shortly." : ""}
       </div>
       <input
         className="login-input"
