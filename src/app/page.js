@@ -7,6 +7,8 @@ import UsersList from "../components/Items/UsersList";
 import User from "../components/Items/User";
 import Header from "../components/Header";
 import { useAuth, AuthProvider } from '../components/Auth/AuthContext';
+import Canvas from '../components/Items/pictochat/canvas';
+import ChatHistory from "@/components/Items/pictochat/chathistory";
 const defaultUsers = [
   {
       id: 1,
@@ -36,7 +38,10 @@ export default function Home() {
   const addUserHandler = (user) => {
     setUsers((prevUsers) => [...prevUsers, user]);
   };
-
+  const [imageDataUrl, setImageDataUrl] = useState(null);
+  const handleExport = (dataUrl) => {
+    setImageDataUrl(dataUrl);
+};
   return (
     <>
      <AuthProvider>
@@ -47,6 +52,9 @@ export default function Home() {
       <Link href="/">Main</Link>
       </button> */}
       <UsersList users={users} />
+      <ChatHistory imageUrl={imageDataUrl} />
+      <Canvas onExport={handleExport}/>
+      
       <button class="button">
       <Link href="/Login">Login</Link>
       </button>
