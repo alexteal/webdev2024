@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import "./index.css";
 
 export default function Login() {
   const [loginStatus, setLoginStatus] = useState(false);
@@ -39,23 +40,26 @@ export default function Login() {
     }
   };
   return (
-    <div>
-      {loginStatus ? "Logged in" : "Not logged in"}
+  
+    <div className="login-container">
+      <h1>Login Here!</h1>
+      <div className="login-status">{loginStatus ? "Logged in" : "Not logged in"}</div>
       <input
+        className="login-input"
         type="text"
         placeholder="Username"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
       />
       <input
+        className="login-input"
         type="password"
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-
-      <button onClick={handleLogin}>Login</button>
-      {errorMessage}
+      <button className="login-button" onClick={handleLogin}>Login</button>
+      <div className="error-message">{errorMessage}</div>
     </div>
   );
 }
