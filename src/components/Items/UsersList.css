@@ -1,0 +1,22 @@
+.users {
+  display: block; 
+  flex-direction: column; /* Stacks children vertically */
+  align-items: center; /* Centers children horizontally in a flex column */
+  margin: 2rem auto;
+  width: 90%;
+  max-width: 40rem;
+}
+
+.users ul {
+  list-style: none;
+  padding: 1rem;
+  width: 100%;  
+
+}
+
+.users li {
+  border: 1px solid #ccc;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  width: 100%;
+}

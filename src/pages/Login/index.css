@@ -1,4 +1,8 @@
 /* login.css */
+*:hover {
+  transition: all 0.3s ease;
+
+}
 .login-container {
     display: flex;
     flex-direction: column;
@@ -15,7 +19,20 @@
     border-radius: 5px; /* Rounded corners */
     width: 300px; /* Fixed width for inputs */
   }
-  
+  .button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff; /* Bootstrap primary blue */
+    color: white;
+    cursor: pointer;
+    width: 320px; /* Slightly wider than input to account for padding */
+    margin-top: 10px; /* Space above the button */
+  }
+
+  .button:hover {
+    background-color: #0056b3; 
+  }
   .login-button {
     padding: 10px 20px;
     border: none;

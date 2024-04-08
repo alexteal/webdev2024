@@ -2,12 +2,21 @@
 
 import { useState } from "react";
 import "./index.css";
+import Link from "next/link";
+import Header from "../../components/Header";
+import { AuthProvider } from '../../components/Auth/AuthContext';
+
 
 export default function Login() {
   const [loginStatus, setLoginStatus] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  
+  function IndexPage() {
+    const [loginStatus, setLoginStatus] = useState(false);
+  }
+  
   const handleLogin = async () => {
     if (username === "" || password === "") {
       setErrorMessage("Please fill out the fields.");
@@ -15,33 +24,45 @@ export default function Login() {
     } else {
       setErrorMessage("");
     }
-    try {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        // we're not gonna worry about security here. It's pictochat
-        // for god's sake
-        body: JSON.stringify({ username: username, password: password }),
-      });
-      if (response.ok) {
-        setLoginStatus(true);
-        console.log("OK");
-      } else {
-        // Handle errors
-        console.error("Login failed");
-        setErrorMessage(
-          "Your login information is incorrect. Do you have an account?",
-        );
+    // Temporary authentication check DELETE LATER
+    if (username === "admin" && password === "admin") {
+      setLoginStatus(true);
+      console.log("Logged in as admin, successfully authenticated:" + "👋");
+      setErrorMessage("Welcome Admin");
+
+    } else {
+      // Original logic for API call
+      try {
+        const response = await fetch("/api/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username: username, password: password }),
+        });
+
+        if (response.ok) {
+          setLoginStatus(true);
+          console.log("OK");
+        } else {
+          // Handle errors
+          console.error("Login failed");
+          setErrorMessage("Your login information is incorrect. Do you have an account?");
+        }
+      } catch (error) {
+        console.error("An error occurred during login:", error);
       }
-    } catch (error) {
-      console.error("An error occurred during login:", error);
     }
   };
   return (
-  
-    <div className="login-container">
+      <>
+      <AuthProvider>
+      <div>
+      <Header loginStatus={loginStatus}/>
+      </div>
+      
+      <div className="login-container">
+      
       <h1>Login Here!</h1>
       <div className="login-status">{loginStatus ? "Logged in" : "Not logged in"}</div>
       <input
@@ -60,6 +81,12 @@ export default function Login() {
       />
       <button className="login-button" onClick={handleLogin}>Login</button>
       <div className="error-message">{errorMessage}</div>
+      <button class="button">
+      <Link href="/">Back to Home!</Link>
+      </button>
     </div>
+    </AuthProvider>
+      </>
+   
   );
 }
