@@ -2,6 +2,7 @@
 import React from "react"; // Removed unused imports
 import styles from "./Header.module.css";
 import { useAuth } from "../Auth/AuthContext"; // Only import what's used
+import Link from "next/link";
 
 function Header() {
   const { isAuthenticated, toggleAuth } = useAuth(); // Call useAuth as a function and destructure
@@ -22,10 +23,11 @@ function Header() {
         <h1>PictoChat Clone</h1>
       </div>
       <nav className={styles.nav}>
-        <a href="/">Home</a>
+        <Link href="/">Home</Link>
         {/* <a href="/about">About Us</a>
         <a href="/contact">Contact</a> */}
-        {isAuthenticated && <a href="/dashboard">Dashboard</a>}
+        {isAuthenticated && <Link href="/dashboard">Dashboard</Link>}
+        {!isAuthenticated && <Link href="/CreateAccount">Sign Up</Link>}
       </nav>
       <div className={styles.authStatus}>
         <h2>

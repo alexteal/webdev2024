@@ -73,7 +73,7 @@ export default function CreateAccount() {
       </button>
       <div className="error-message">{errorMessage}</div>
       <button className="login-button">
-        <Link href="/Login">Login</Link>
+        <Link href="/">Home</Link>
       </button>
     </div>
   );
