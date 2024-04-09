@@ -35,29 +35,28 @@ const defaultUsers = [
 //primary routing
 export default function Home() {
   const [users, setUsers] = useState(defaultUsers);
+  const [imageDataUrl, setImageDataUrl] = useState(null);
+  const [chatHistoryUrls, setChatHistoryUrls] = useState([]);
   const addUserHandler = (user) => {
     setUsers((prevUsers) => [...prevUsers, user]);
   };
-  const [imageDataUrl, setImageDataUrl] = useState(null);
   const handleExport = (dataUrl) => {
     setImageDataUrl(dataUrl);
+    setChatHistoryUrls((prevUrls) => [...prevUrls, dataUrl]);
   };
   return (
     <>
       <AuthProvider>
         <Header />
         <main className={styles.main}>
-          {/* NOT BEING USED RN SO I TURNED OFF THIS MAIN BUTTON */}
-          {/* <button class="button">
-      <Link href="/">Main</Link>
-      </button> */}
           <UsersList users={users} />
-          <ChatHistory imageUrl={imageDataUrl} />
-          <Canvas onExport={handleExport} />
-
           <button class="button">
             <Link href="/Login">Login</Link>
           </button>
+          {chatHistoryUrls.map((url, index) => (
+            <ChatHistory key={index} imageUrl={url} />
+          ))}
+          <Canvas onExport={handleExport} />
         </main>
       </AuthProvider>
     </>
