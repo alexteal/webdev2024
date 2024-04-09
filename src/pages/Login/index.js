@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import Link from "next/link";
 import "./index.css";
 import Link from "next/link";
 import Header from "../../components/Header";
@@ -64,25 +66,33 @@ export default function Login() {
       <div className="login-container">
       
       <h1>Login Here!</h1>
-      <div className="login-status">{loginStatus ? "Logged in" : "Not logged in"}</div>
-      <input
-        className="login-input"
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        className="login-input"
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button className="login-button" onClick={handleLogin}>Login</button>
+      <div className="login-status">
+        <p>{loginStatus ? "Logged in. You will be redirected shortly." : ""}</p>
+      </div>
+      <div>
+        <input
+          className="login-input"
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+      </div>
+      <div>
+        <input
+          className="login-input"
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      </div>
+      <button className="login-button" onClick={handleLogin}>
+        Login
+      </button>
       <div className="error-message">{errorMessage}</div>
-      <button class="button">
-      <Link href="/">Back to Home!</Link>
+      <button className="login-button">
+        <Link href="/CreateAccount">Signup</Link>
       </button>
     </div>
     </AuthProvider>
