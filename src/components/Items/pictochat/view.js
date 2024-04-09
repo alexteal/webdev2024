@@ -8,6 +8,7 @@ function ChatView() {
   const { isAuthenticated, toggleAuth } = useAuth(); // Call useAuth as a function and destructure
   const [imageDataUrl, setImageDataUrl] = useState(null);
   const [chatHistoryUrls, setChatHistoryUrls] = useState([]);
+  const imageUrls = ["/image0.png", "/image1.png", "/image2.png"];
   const handleExport = (dataUrl) => {
     setImageDataUrl(dataUrl);
     setChatHistoryUrls((prevUrls) => [...prevUrls, dataUrl]);
@@ -17,13 +18,12 @@ function ChatView() {
     <div>
       {isAuthenticated ? (
         <>
-          <img src="/image0.png" alt="image" />
-          <h2>From admin</h2>
-          <img src="/image1.png" alt="image" />
-          <h2>From admin</h2>
-          <img src="/image2.png" alt="image" />
-          <h2>From admin</h2>
-
+          {imageUrls.map((url, index) => (
+            <div key={index}>
+              <img src={url} alt="image" />
+              <h2>From admin</h2>
+            </div>
+          ))}{" "}
           {chatHistoryUrls.map((url, index) => (
             <ChatHistory key={index} imageUrl={url} user="admin" />
           ))}
@@ -32,12 +32,12 @@ function ChatView() {
       ) : (
         <>
           <h1> Login to send messages! Here's a preview of what you missed.</h1>
-          <img src="/image0.png" alt="image" />
-          <h2>From admin</h2>
-          <img src="/image1.png" alt="image" />
-          <h2>From admin</h2>
-          <img src="/image2.png" alt="image" />
-          <h2>From admin</h2>
+          {imageUrls.map((url, index) => (
+            <div key={index}>
+              <img src={url} alt="image" />
+              <h2>From admin</h2>
+            </div>
+          ))}
         </>
       )}
     </div>
