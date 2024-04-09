@@ -35,12 +35,14 @@ function Header() {
         </h2>
         {isAuthenticated ? (
           <div>
-            <button
-              className={styles.logoutButton}
-              onClick={() => toggleAuth()}
-            >
-              Logout
-            </button>
+            <Link href="/">
+              <button
+                className={styles.logoutButton}
+                onClick={() => toggleAuth()}
+              >
+                Logout
+              </button>
+            </Link>
           </div>
         ) : (
           <div>

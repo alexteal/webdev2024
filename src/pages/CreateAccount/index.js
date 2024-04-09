@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import Header from "../../components/Header";
+import { AuthProvider } from "../../components/Auth/AuthContext";
 import "./index.css";
 
 export default function CreateAccount() {
@@ -49,32 +51,40 @@ export default function CreateAccount() {
     }
   };
   return (
-    <div className="login-container">
-      <h1>Signup Here!</h1>
-      <div className="login-status">
-        {loginStatus ? "Logged in. You will be redirected shortly." : ""}
-      </div>
-      <input
-        className="login-input"
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        className="login-input"
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button className="login-button" onClick={handleLogin}>
-        Login
-      </button>
-      <div className="error-message">{errorMessage}</div>
-      <button className="login-button">
-        <Link href="/">Home</Link>
-      </button>
-    </div>
+    <>
+      <AuthProvider>
+        <div>
+          <Header loginStatus={loginStatus} />
+        </div>
+
+        <div className="login-container">
+          <h1>Signup Here!</h1>
+          <div className="login-status">
+            {loginStatus ? "Logged in. You will be redirected shortly." : ""}
+          </div>
+          <input
+            className="login-input"
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <input
+            className="login-input"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button className="login-button" onClick={handleLogin}>
+            Login
+          </button>
+          <div className="error-message">{errorMessage}</div>
+          <button className="login-button">
+            <Link href="/">Home</Link>
+          </button>
+        </div>
+      </AuthProvider>
+    </>
   );
 }

@@ -19,11 +19,8 @@ function ChatView() {
       {isAuthenticated ? (
         <>
           {imageUrls.map((url, index) => (
-            <div key={index}>
-              <img src={url} alt="image" />
-              <h2>From admin</h2>
-            </div>
-          ))}{" "}
+            <ChatHistory key={index} imageUrl={url} user="admin" />
+          ))}
           {chatHistoryUrls.map((url, index) => (
             <ChatHistory key={index} imageUrl={url} user="admin" />
           ))}
@@ -33,10 +30,7 @@ function ChatView() {
         <>
           <h1> Login to send messages! Here's a preview of what you missed.</h1>
           {imageUrls.map((url, index) => (
-            <div key={index}>
-              <img src={url} alt="image" />
-              <h2>From admin</h2>
-            </div>
+            <ChatHistory key={index} imageUrl={url} user="admin" />
           ))}
         </>
       )}
