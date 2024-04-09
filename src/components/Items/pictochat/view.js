@@ -17,7 +17,13 @@ function ChatView() {
     <div>
       {isAuthenticated ? (
         <>
-          {" "}
+          <img src="/image0.png" alt="image" />
+          <h2>From admin</h2>
+          <img src="/image1.png" alt="image" />
+          <h2>From admin</h2>
+          <img src="/image2.png" alt="image" />
+          <h2>From admin</h2>
+
           {chatHistoryUrls.map((url, index) => (
             <ChatHistory key={index} imageUrl={url} user="admin" />
           ))}

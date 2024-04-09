@@ -4,7 +4,7 @@ function ChatHistory({ imageUrl, user }) {
       {imageUrl && (
         <>
           <img src={imageUrl} alt="Chat Drawing" />
-          <p>From {user}</p>
+          <h2>From {user}</h2>
         </>
       )}
     </div>
