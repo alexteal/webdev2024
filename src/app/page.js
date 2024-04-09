@@ -9,6 +9,7 @@ import Header from "../components/Header";
 import { useAuth, AuthProvider } from "../components/Auth/AuthContext";
 import Canvas from "../components/Items/pictochat/canvas";
 import ChatHistory from "@/components/Items/pictochat/chathistory";
+import ChatView from "@/components/Items/pictochat/view";
 const defaultUsers = [
   {
     id: 1,
@@ -53,10 +54,7 @@ export default function Home() {
           <button class="button">
             <Link href="/Login">Login</Link>
           </button>
-          {chatHistoryUrls.map((url, index) => (
-            <ChatHistory key={index} imageUrl={url} />
-          ))}
-          <Canvas onExport={handleExport} />
+          <ChatView />
         </main>
       </AuthProvider>
     </>

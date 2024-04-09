@@ -4,21 +4,19 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import "./index.css";
-import Link from "next/link";
 import Header from "../../components/Header";
-import { AuthProvider } from '../../components/Auth/AuthContext';
-
+import { AuthProvider } from "../../components/Auth/AuthContext";
 
 export default function Login() {
   const [loginStatus, setLoginStatus] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  
+
   function IndexPage() {
     const [loginStatus, setLoginStatus] = useState(false);
   }
-  
+
   const handleLogin = async () => {
     if (username === "" || password === "") {
       setErrorMessage("Please fill out the fields.");
@@ -31,7 +29,6 @@ export default function Login() {
       setLoginStatus(true);
       console.log("Logged in as admin, successfully authenticated:" + "👋");
       setErrorMessage("Welcome Admin");
-
     } else {
       // Original logic for API call
       try {
@@ -49,7 +46,9 @@ export default function Login() {
         } else {
           // Handle errors
           console.error("Login failed");
-          setErrorMessage("Your login information is incorrect. Do you have an account?");
+          setErrorMessage(
+            "Your login information is incorrect. Do you have an account?",
+          );
         }
       } catch (error) {
         console.error("An error occurred during login:", error);
@@ -57,46 +56,46 @@ export default function Login() {
     }
   };
   return (
-      <>
+    <>
       <AuthProvider>
-      <div>
-      <Header loginStatus={loginStatus}/>
-      </div>
-      
-      <div className="login-container">
-      
-      <h1>Login Here!</h1>
-      <div className="login-status">
-        <p>{loginStatus ? "Logged in. You will be redirected shortly." : ""}</p>
-      </div>
-      <div>
-        <input
-          className="login-input"
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </div>
-      <div>
-        <input
-          className="login-input"
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </div>
-      <button className="login-button" onClick={handleLogin}>
-        Login
-      </button>
-      <div className="error-message">{errorMessage}</div>
-      <button className="login-button">
-        <Link href="/CreateAccount">Signup</Link>
-      </button>
-    </div>
-    </AuthProvider>
-      </>
-   
+        <div>
+          <Header loginStatus={loginStatus} />
+        </div>
+
+        <div className="login-container">
+          <h1>Login Here!</h1>
+          <div className="login-status">
+            <p>
+              {loginStatus ? "Logged in. You will be redirected shortly." : ""}
+            </p>
+          </div>
+          <div>
+            <input
+              className="login-input"
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+          <div>
+            <input
+              className="login-input"
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <button className="login-button" onClick={handleLogin}>
+            Login
+          </button>
+          <div className="error-message">{errorMessage}</div>
+          <button className="login-button">
+            <Link href="/CreateAccount">Signup</Link>
+          </button>
+        </div>
+      </AuthProvider>
+    </>
   );
 }
