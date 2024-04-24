@@ -35,6 +35,30 @@
     padding: 10px 20px;
     margin-left: 20px;
   }
+  .signupButton {
+    background-color: #01cc4b;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    margin-left: 20px;
+  }
+
+  .signupButton:hover {
+    background-color: #139643;
+  }
+  .loginButton {
+    background-color: #cc017b;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    margin-left: 20px;
+  }
+  .loginButton:hover {
+    background-color: #9d12ad;
+
+  }
   
   .logoutButton:hover {
     background-color: #d32f2f;

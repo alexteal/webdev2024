@@ -1,11 +1,10 @@
 "use client";
-import React from "react"; // Removed unused imports
-import styles from "./Header.module.css";
-import { useAuth } from "../Auth/AuthContext"; // Only import what's used
 import Link from "next/link";
-
+import React from "react"; // Removed unused imports
+import { useAuth } from "../Auth/AuthContext"; // Only import what's used
+import styles from "./Header.module.css";
 function Header() {
-  const { isAuthenticated, toggleAuth } = useAuth(); // Call useAuth as a function and destructure
+  const { isAuthenticated, toggleAuth } = useAuth();
 
   ///?? i waas having a lot of issues with ^^ This shit.
 
@@ -16,7 +15,11 @@ function Header() {
     if (hour < 18) return "Good Afternoon";
     return "Good Evening";
   };
-
+  const autoLoginAdmin = () => {
+    // Here you could also set any admin-specific state or perform additional actions
+    console.log("Logging in as admin automatically");
+    toggleAuth(); 
+  };
   return (
     <header className={styles.header}>
       <div className={styles.logo}>
@@ -24,10 +27,12 @@ function Header() {
       </div>
       <nav className={styles.nav}>
         <Link href="/">Home</Link>
-        {/* <a href="/about">About Us</a>
-        <a href="/contact">Contact</a> */}
         {isAuthenticated && <Link href="/dashboard">Dashboard</Link>}
-        {!isAuthenticated && <Link href="/CreateAccount">Sign Up</Link>}
+        {!isAuthenticated && (
+          <button className={styles.loginButton} onClick={autoLoginAdmin}>
+            AutoLogInAdminThing
+          </button>
+        )}
       </nav>
       <div className={styles.authStatus}>
         <h2>
@@ -46,12 +51,16 @@ function Header() {
           </div>
         ) : (
           <div>
-            <button
-              className={styles.logoutButton}
-              onClick={() => toggleAuth()}
-            >
+           <Link href="/CreateAccount" passHref>
+       <button className={styles.signupButton}>
+            Sign up
+             </button>
+        </Link>
+        <Link href="/Login" passHref>
+            <button className={styles.loginButton}>
               login
             </button>
+          </Link>
             <h2>Not authenticated</h2>
           </div>
         )}

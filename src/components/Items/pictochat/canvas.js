@@ -1,6 +1,6 @@
-import React, { useRef, useEffect, useState } from "react";
-import styles from "./canvas.css";
+import React, { useEffect, useRef, useState } from "react";
 import mainStyle from "../../../app/page.module.css";
+import styles from "./canvas.css";
 
 function DrawingComponent({ onExport }) {
   const canvasRef = useRef(null);
@@ -19,7 +19,7 @@ function DrawingComponent({ onExport }) {
     context.fillStyle = "white"; // Set fill color to white
     context.fillRect(0, 0, canvas.width, canvas.height); // Fill the canvas with white
     context.lineCap = "round";
-    context.strokeStyle = "black";
+    context.strokeStyle = "red";
     context.lineWidth = 5;
     contextRef.current = context;
   }, []);

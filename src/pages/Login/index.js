@@ -1,60 +1,55 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import Link from "next/link";
-import "./index.css";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { AuthProvider, useAuth } from '../../components/Auth/AuthContext'; // Adjust the path as necessary
 import Header from "../../components/Header";
-import { AuthProvider } from "../../components/Auth/AuthContext";
+import "./index.css";
 
 export default function Login() {
+  const { isAuthenticated, toggleAuth } = useAuth();  
   const [loginStatus, setLoginStatus] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-
+const router = useRouter();
   function IndexPage() {
     const [loginStatus, setLoginStatus] = useState(false);
   }
 
   const handleLogin = async () => {
-    if (username === "" || password === "") {
-      setErrorMessage("Please fill out the fields.");
-      return;
-    } else {
-      setErrorMessage("");
-    }
-    // Temporary authentication check DELETE LATER
-    if (username === "admin" && password === "admin") {
-      setLoginStatus(true);
-      console.log("Logged in as admin, successfully authenticated:" + "👋");
-      setErrorMessage("Welcome Admin");
-    } else {
-      // Original logic for API call
-      try {
-        const response = await fetch("/api/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ username: username, password: password }),
-        });
+     // Temporary authentication check DELETE LATER
+  if (username === "admin" && password === "admin") {
+    setLoginStatus(true);
+    // Proceed to redirect right after setting the state
+    setTimeout(() => {
+      router.push('/');
+    }, 1000); // Redirect after a delay
+  } else {
+    try {
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
 
-        if (response.ok) {
-          setLoginStatus(true);
-          console.log("OK");
-        } else {
-          // Handle errors
-          console.error("Login failed");
-          setErrorMessage(
-            "Your login information is incorrect. Do you have an account?",
-          );
-        }
-      } catch (error) {
-        console.error("An error occurred during login:", error);
+      if (response.ok) {
+        setLoginStatus(true);
+        setTimeout(() => {
+          router.push('/');
+        }, 1000); // Redirect after a delay
+      } else {
+        setErrorMessage("Your login information is incorrect. Do you have an account?");
       }
+    } catch (error) {
+      console.error("An error occurred during login:", error);
+      setErrorMessage("Failed to log in, please try again.");
     }
-  };
+  }
+};
   return (
     <>
       <AuthProvider>
@@ -67,8 +62,10 @@ export default function Login() {
           <div className="login-status">
             <p>
               {loginStatus ? "Logged in. You will be redirected shortly." : ""}
+              
             </p>
           </div>
+          
           <div>
             <input
               className="login-input"

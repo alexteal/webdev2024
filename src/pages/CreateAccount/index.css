@@ -1,3 +1,6 @@
+* {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 /* login.css */
 .login-container {
   display: flex;
@@ -34,4 +37,26 @@
 .error-message {
   color: #dc3545; /* Bootstrap danger color */
   margin-top: 10px;
+}
+/* Enhanced mobile and tablet responsiveness */
+@media (max-width: 700px) {
+  .main {
+    padding: 2rem;
+  }
+
+  .description, .grid {
+    width: 100%;
+    max-width: none;
+  }
+
+  .grid {
+    grid-template-columns: 1fr; /* Stack cards on mobile */
+  }
+}
+
+
+@media (min-width: 701px) and (max-width: 1120px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr); /* Adjust grid for tablets */
+  }
 }
