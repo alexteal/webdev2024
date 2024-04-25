@@ -8,7 +8,8 @@ function Header() {
 
   ///?? i waas having a lot of issues with ^^ This shit.
 
-  // Dynamic greeting based on time of day (saw this online and thought it was cutsie 😊)
+  // Dynamic greeting based on time of day (saw this online and thought it was
+  // cutsie 😊)
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return "Good Morning";
@@ -16,9 +17,10 @@ function Header() {
     return "Good Evening";
   };
   const autoLoginAdmin = () => {
-    // Here you could also set any admin-specific state or perform additional actions
+    // Here you could also set any admin-specific state or perform additional
+    // actions
     console.log("Logging in as admin automatically");
-    toggleAuth(); 
+    toggleAuth();
   };
   return (
     <header className={styles.header}>
@@ -45,23 +47,23 @@ function Header() {
                 className={styles.logoutButton}
                 onClick={() => toggleAuth()}
               >
+                {" "}
                 Logout
               </button>
             </Link>
           </div>
         ) : (
           <div>
-           <Link href="/CreateAccount" passHref>
-       <button className={styles.signupButton}>
-            Sign up
-             </button>
-        </Link>
-        <Link href="/Login" passHref>
-            <button className={styles.loginButton}>
-              login
-            </button>
-          </Link>
-            <h2>Not authenticated</h2>
+            <Link
+              href="/CreateAccount
+       "
+              passHref
+            >
+              <button className={styles.signupButton}>Sign up</button>
+            </Link>
+            <Link href="/Login" passHref>
+              <button className={styles.loginButton}>login</button>
+            </Link>
           </div>
         )}
       </div>
