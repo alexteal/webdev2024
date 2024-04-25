@@ -15,8 +15,10 @@
   }
   
   .button {
-    padding: 8px 16px;
-    font-size: 16px;
+    padding: 12px 24px; /* Increased padding */
+    font-size: 18px; /* Larger font size */
+    min-width: 150px; /* Minimum width */
+    min-height: 50px; /* Minimum height */
     color: white;
     background-color: #007bff;
     border: none;

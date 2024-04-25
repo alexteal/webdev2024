@@ -83,7 +83,7 @@ function DrawingComponent({ onExport }) {
         onMouseMove={draw}
         ref={canvasRef}
       />
-       <button className={`${styles.button} ${mainStyle.button}`} onClick={exportToImage}>
+       <button class="button"  onClick={exportToImage}>
         Send!
       </button>
     </div>
