@@ -9,9 +9,9 @@ function DrawingComponent({ onExport }) {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    canvas.width = 400 * 2; // Multiply by 2 for high resolution
+    canvas.width = 800 * 2; // Multiply by 2 for high resolution
     canvas.height = 300 * 2;
-    canvas.style.width = `400px`; // CSS size
+    canvas.style.width = `800px`; // CSS size
     canvas.style.height = `300px`;
 
     const context = canvas.getContext("2d");
@@ -83,7 +83,7 @@ function DrawingComponent({ onExport }) {
         onMouseMove={draw}
         ref={canvasRef}
       />
-      <button class="button" className={mainStyle} onClick={exportToImage}>
+       <button className={`${styles.button} ${mainStyle.button}`} onClick={exportToImage}>
         Send!
       </button>
     </div>
