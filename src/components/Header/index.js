@@ -29,7 +29,7 @@ function Header() {
       </div>
       <nav className={styles.nav}>
         <Link href="/">Home</Link>
-        {isAuthenticated && <Link href="/dashboard">Dashboard</Link>}
+        {isAuthenticated && <Link href="/">Dashboard</Link>}
         {!isAuthenticated && (
           <button className={styles.loginButton} onClick={autoLoginAdmin}>
             AutoLogInAdminThing

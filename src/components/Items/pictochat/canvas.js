@@ -19,7 +19,7 @@ function DrawingComponent({ onExport }) {
     context.fillStyle = "white"; // Set fill color to white
     context.fillRect(0, 0, canvas.width, canvas.height); // Fill the canvas with white
     context.lineCap = "round";
-    context.strokeStyle = "red";
+    context.strokeStyle = "black";
     context.lineWidth = 5;
     contextRef.current = context;
   }, []);
