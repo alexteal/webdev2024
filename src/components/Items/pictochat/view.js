@@ -18,7 +18,8 @@ function ChatView() {
   };
 
   const deleteImage = (imageUrl) => {
-    setImageUrls(prevUrls => prevUrls.filter(url => url !== imageUrl));
+    setImageUrls(prev => prev.filter(url => url !== imageUrl));
+    setChatHistoryUrls(prev => prev.filter(url => url !== imageUrl));
   };
   
   const handleImageSelect = (imageUrl) => {
