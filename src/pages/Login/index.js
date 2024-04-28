@@ -23,11 +23,11 @@ export default function Login() {
     event.preventDefault();
     // Temporary authentication check DELETE LATER
     if (username === "admin" && password === "admin") {
+      toggleAuth(username); // Set the username in the auth context
       setLoginStatus(true);
-      // Proceed to redirect right after setting the state
       setTimeout(() => {
         router.push("/");
-      }, 1000); // Redirect after a delay
+      }, 1000);
     } else {
       try {
         const response = await fetch("/api/login", {
@@ -37,12 +37,12 @@ export default function Login() {
           },
           body: JSON.stringify({ username, password }),
         });
-
         if (response.ok) {
+          toggleAuth(username); // Set the username in the auth context
           setLoginStatus(true);
           setTimeout(() => {
             router.push("/");
-          }, 1000); // Redirect after a delay
+          }, 1000);
         } else {
           setErrorMessage(
             "Your login information is incorrect. Do you have an account?",
