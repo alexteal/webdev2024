@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import mainCSS from '../../app/page.module.css';
+import mainCSS from "../../app/page.module.css";
 import { AuthProvider } from "../../components/Auth/AuthContext";
 import Header from "../../components/Header";
 import "./index.css";
@@ -54,8 +54,8 @@ export default function CreateAccount() {
   return (
     <>
       <AuthProvider>
-          <Header loginStatus={loginStatus} />
-          <div className="login-container">
+        <Header loginStatus={loginStatus} />
+        <div className="login-container">
           <h1>Signup Here!</h1>
           <div className="login-status">
             {loginStatus ? "Logged in. You will be redirected shortly." : ""}
