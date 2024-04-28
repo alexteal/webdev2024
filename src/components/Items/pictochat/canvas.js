@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import mainStyle from "../../../app/page.module.css";
 import styles from "./canvas.css";
+import { connect } from "mongoose";
 
+const conn_str = 'mongodb+srv://khushib2013:4oMTYIILQEPA1ZOt@pictochat.gw69d9a.mongodb.net/?retryWrites=true&w=majority&appName=Pictochat'
 function DrawingComponent({ onExport }) {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
@@ -55,6 +57,11 @@ function DrawingComponent({ onExport }) {
     const imageDataURL = canvas.toDataURL("image/png");
     onExport(imageDataURL); // Pass the image data URL to the parent component
     clearCanvas(); // Clear the canvas after exporting
+
+    connect(conn_str);
+    let conn = mongoose.connection;
+
+    conn.collection("test").insertOne({ "name": "KHUSHI" });
   };
   const downloadAndExport = () => {
     const canvas = canvasRef.current;
