@@ -19,7 +19,8 @@ export default function Login() {
     const [loginStatus, setLoginStatus] = useState(false);
   }
 
-  const handleLogin = async () => {
+  const handleLogin = async (event) => {
+    event.preventDefault();
     // Temporary authentication check DELETE LATER
     if (username === "admin" && password === "admin") {
       setLoginStatus(true);
@@ -67,7 +68,7 @@ export default function Login() {
               {loginStatus ? "Logged in. You will be redirected shortly." : ""}
             </p>
           </div>
-          <form>
+          <form onSubmit={handleLogin}>
             <div>
               <input
                 className="login-input"
