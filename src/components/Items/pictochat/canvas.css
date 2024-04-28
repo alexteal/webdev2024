@@ -1,54 +1,51 @@
 .canvasContainer {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    margin: 10px;
-    padding: 10px;
-    background-color: #fff;
-    border-radius: 10px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .canvas {
-    border: 5px solid #777777; /* Add a subtle border to the canvas */
-  }
-  
-  .button {
-    padding: 12px 24px; /* Increased padding */
-    font-size: 18px; /* Larger font size */
-    min-width: 150px; /* Minimum width */
-    min-height: 50px; /* Minimum height */
-    color: white;
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .button:hover {
-    background-color: #0056b3;
-  }
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  padding: 10px;
+  background-color: #faf;
+  border-radius: 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Add this to center the children vertically */
+  flex-direction: column;
+}
+
+.button {
+  padding: 12px 24px;
+  font-size: 18px;
+  width: 100%; /* Add this to stretch the button to the full width */
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px 0; /* Add this to give the button a small margin */
+  transition: background-color 0.3s ease;
+}
+.button:hover {
+  background-color: #0056b3;
+}
 .canvas {
-    border: 2px solid #000;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    background-color: white; /* Ensure canvas background is white */
+  border: 2px solid #000;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background-color: white;
+  border: 5px solid #777777;
+  margin: 0 auto; /* Add this to center the canvas horizontally */
+  align-self: center;
 }
-
 .exportButton {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
 }
-
 .exportButton:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }

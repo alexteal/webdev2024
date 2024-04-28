@@ -1,9 +1,13 @@
+@import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
 :root {
   --max-width: 1100px;
   --border-radius: 12px;
   --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
     "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
     "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+  font-family: "VT323", monospace;
+  font-weight: 400;
+  font-style: normal;
 
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -120,7 +124,8 @@ a {
 }
 
 /* Active/Focus State for Buttons */
-.button:active, .button:focus {
+.button:active,
+.button:focus {
   transform: translateY(1px); /* Pressed effect on click */
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15); /* Reduced shadow for pressed effect */
   outline: none; /* Removes the default focus outline */
@@ -128,7 +133,11 @@ a {
 
 /* Disabled State for Buttons */
 .button:disabled {
-  background-image: linear-gradient(45deg, #9a9a9a, #b1b1b1); /* Grayscale gradient for disabled look */
+  background-image: linear-gradient(
+    45deg,
+    #9a9a9a,
+    #b1b1b1
+  ); /* Grayscale gradient for disabled look */
   cursor: not-allowed; /* Not-allowed cursor for disabled state */
   box-shadow: none; /* No shadow for flat disabled look */
   color: #ffffff; /* Maintains white text for contrast */

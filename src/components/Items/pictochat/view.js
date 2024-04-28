@@ -3,6 +3,7 @@ import React, { useState } from "react"; // Removed unused imports
 import { useAuth } from "@/components/Auth/AuthContext"; // Only import what's used
 import ChatHistory from "./chathistory";
 import Canvas from "../pictochat/canvas";
+import styles from "./view.css";
 
 function ChatView() {
   const { isAuthenticated, toggleAuth } = useAuth(); // Call useAuth as a function and destructure
@@ -15,23 +16,40 @@ function ChatView() {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        height: "100vh", // or set a specific pixel value
+        overflowY: "scroll",
+        display: "flex",
+        flexDirection: "column",
+        position: "relative",
+      }}
+    >
       {isAuthenticated ? (
-        <>
-          {imageUrls.map((url, index) => (
-            <ChatHistory key={index} imageUrl={url} user="admin" />
-          ))}
-          {chatHistoryUrls.map((url, index) => (
-            <ChatHistory key={index} imageUrl={url} user="admin" />
-          ))}
-          <Canvas onExport={handleExport} />
-        </>
+        <div>
+          {" "}
+          <div>
+            <ChatHistory
+              imageUrls={imageUrls.concat(chatHistoryUrls)}
+              user="admin"
+            />
+          </div>
+          <div style={{ flexGrow: "0" }}>
+            <Canvas onExport={handleExport} />
+          </div>
+        </div>
       ) : (
         <>
-          <h1> Login to send messages! Here's a preview of what you missed.</h1>
-          {imageUrls.map((url, index) => (
-            <ChatHistory key={index} imageUrl={url} user="admin" />
-          ))}
+          <h1 style={{ color: "black" }}>
+            {" "}
+            Login to send messages! Here's a preview of what you missed.
+          </h1>
+          <div className={styles.chatWrapper}>
+            <ChatHistory
+              imageUrls={imageUrls.concat(chatHistoryUrls)}
+              user="admin"
+            />
+          </div>
         </>
       )}
     </div>

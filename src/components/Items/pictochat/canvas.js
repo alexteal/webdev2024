@@ -21,7 +21,7 @@ function DrawingComponent({ onExport }) {
     context.fillStyle = "white"; // Set fill color to white
     context.fillRect(0, 0, canvas.width, canvas.height); // Fill the canvas with white
     context.lineCap = "round";
-    context.strokeStyle = "red";
+    context.strokeStyle = "black";
     context.lineWidth = 5;
     contextRef.current = context;
   }, []);
@@ -82,15 +82,28 @@ function DrawingComponent({ onExport }) {
     clearCanvas(); // Clear the canvas after exporting
   };
   return (
-    <div className={styles.canvasContainer}>
+    //<div className={styles.canvasContainer}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+        margin: "10px",
+        padding: "10px",
+        borderRadius: "10px",
+        border: "5px solid grey",
+        backgroundColor: "#fff",
+      }}
+    >
       <canvas
         className={styles.canvas}
         onMouseDown={startDrawing}
         onMouseUp={stopDrawing}
         onMouseMove={draw}
         ref={canvasRef}
+        style={{ alignSelf: "center" }}
       />
-       <button className="button"  onClick={exportToImage}>
+      <button className="button" onClick={exportToImage}>
         Send!
       </button>
     </div>

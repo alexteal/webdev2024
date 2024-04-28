@@ -1,5 +1,5 @@
 * {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "VT323", monospace;
 }
 /* login.css */
 .login-container {
@@ -44,7 +44,8 @@
     padding: 2rem;
   }
 
-  .description, .grid {
+  .description,
+  .grid {
     width: 100%;
     max-width: none;
   }
@@ -53,7 +54,6 @@
     grid-template-columns: 1fr; /* Stack cards on mobile */
   }
 }
-
 
 @media (min-width: 701px) and (max-width: 1120px) {
   .grid {
