@@ -1,26 +1,26 @@
 import { NextResponse } from "next/server";
 import { v4 as uuid } from "uuid";
-import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-
+import {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+} from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { config } from "next/config";
 import sharp from "sharp";
-
+const { serverRuntimeConfig } = config();
 const s3Client = new S3Client({
-  region: process.env.AWS_REGION,
+  region: serverRuntimeConfig.AWS_REGION,
   credentials: {
-    accessKeyId: process.env.AWS_ACCESSKEY_ID,
-    secretAccessKey: process.env.AWS_ACCESSKEY_SECRET,
+    accessKeyId: serverRuntimeConfig.AWS_ACCESSKEY_ID,
+    secretAccessKey: serverRuntimeConfig.AWS_ACCESSKEY_SECRET,
   },
 });
 
-async function uploadImageToS3(
-  file,
-  fileName,
-  type
-){
-//   const resizedImageBuffer = await sharp(file)
-//     .resize(400, 500) // Specify your desired width or height for resizing
-//     .toBuffer();
+async function uploadImageToS3(file, fileName, type) {
+  //   const resizedImageBuffer = await sharp(file)
+  //     .resize(400, 500) // Specify your desired width or height for resizing
+  //     .toBuffer();
 
   const params = {
     Bucket: process.env.AWS_BUCKET_NAME,
@@ -39,36 +39,35 @@ async function uploadImageToS3(
 }
 
 export default async function handler(request, response) {
-    const { method } = request;
-        
-    switch (method) {
-        case "POST":
-            try {
-                const formData = await request.formData();
-                console.log(formData, "Form data")
-                const file = formData.get("file");
-                if (!file) {
-                    return NextResponse.json(
-                        { error: "File blob is required." },
-                        { status: 400 }
-                    );
-                }
+  const { method } = request;
 
-                const mimeType = file.type;
-                const fileExtension = mimeType.split("/")[1];
+  switch (method) {
+    case "POST":
+      try {
+        const formData = await request.formData();
+        console.log(formData, "Form data");
+        const file = formData.get("file");
+        if (!file) {
+          return NextResponse.json(
+            { error: "File blob is required." },
+            { status: 400 },
+          );
+        }
 
-                const buffer = Buffer.from(await file.arrayBuffer());
-                const url = await uploadImageToS3(
-                    buffer,
-                    uuid() + "." + fileExtension,
-                    mimeType
-                );
+        const mimeType = file.type;
+        const fileExtension = mimeType.split("/")[1];
 
-                return NextResponse.json({ success: true, url });
-            } catch (error) {
-                console.error("Error uploading image:", error);
-                NextResponse.json({ message: "Error uploading image" });
-            }
-    }
+        const buffer = Buffer.from(await file.arrayBuffer());
+        const url = await uploadImageToS3(
+          buffer,
+          uuid() + "." + fileExtension,
+          mimeType,
+        );
 
+        return NextResponse.json({ success: true, url });
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        NextResponse.json({ message: "Error uploading image" });
+      }
+  }
 }
