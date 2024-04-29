@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
-module.exports = {
+const nextConfig = {
   serverRuntimeConfig: {
     AWS_REGION: process.env.AWS_REGION,
     AWS_ACCESSKEY_ID: process.env.AWS_ACCESSKEY_ID,
@@ -9,4 +8,5 @@ module.exports = {
   },
   // other configurations...
 };
+
 export default nextConfig;
