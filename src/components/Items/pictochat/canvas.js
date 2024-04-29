@@ -1,9 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import mainStyle from "../../../app/page.module.css";
 import styles from "./canvas.css";
-import { connect } from "mongoose";
 
-const conn_str = 'mongodb+srv://khushib2013:4oMTYIILQEPA1ZOt@pictochat.gw69d9a.mongodb.net/?retryWrites=true&w=majority&appName=Pictochat'
+/**
+ * Convert canvas data URI to blob object for S3
+ */
+function dataUriToBlob(dataUri) {
+  var binary = atob(dataURI.split(',')[1]);
+  var array = [];
+  for(var i = 0; i < binary.length; i++) {
+      array.push(binary.charCodeAt(i));
+  }
+  return new Blob([new Uint8Array(array)], {type: 'image/png'});
+}
+
 function DrawingComponent({ onExport }) {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
@@ -52,16 +62,44 @@ function DrawingComponent({ onExport }) {
     contextRef.current.closePath();
     setIsDrawing(false);
   };
-  const exportToImage = () => {
+  const exportToImage = async () => {
     const canvas = canvasRef.current;
+    console.log(canvas);
     const imageDataURL = canvas.toDataURL("image/png");
     onExport(imageDataURL); // Pass the image data URL to the parent component
     clearCanvas(); // Clear the canvas after exporting
 
-    connect(conn_str);
-    let conn = mongoose.connection;
+    // Save it to S3
+    // TODO: Convert to blob object so s3 can store the image, then pass that to mongoDB
+    // Maybe you have to convert blob to file and then upload to S3?
+    // const blob = dataUriToBlob(imageDataURL);
+  canvas.toBlob((blob) => {
+    if (blob === null) return;
+    S3.upload({
+      Key: "where/the/file/goes.png",
+      ContentType: "image/png",
+      Body: blob,
+    }, (err, data) => {});
+  }, "image/png");
 
-    conn.collection("test").insertOne({ "name": "KHUSHI" });
+
+    // Save this to Mongo DB
+    try {
+      const res = await fetch("/api/drawings", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ "url": "www.fakeUrl.com", "userName": "testString" }),
+      });
+
+      if (!res.ok) {
+        throw new Error(res.status.toString());
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
   const downloadAndExport = () => {
     const canvas = canvasRef.current;
