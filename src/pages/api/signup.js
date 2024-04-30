@@ -9,7 +9,7 @@ export default function signup(req, res) {
       res.status(401).json({ success: false });
       return;
     }
-    console.log(username);
+    console.log("Signing up with: " + username);
     res.setHeader(
       "Set-Cookie",
       serialize("username", username, {
