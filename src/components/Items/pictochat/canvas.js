@@ -62,8 +62,7 @@ function uploadFileToS3(dataUri, bucketName, objectKey) {
 //   return new Blob([new Uint8Array(array)], { type: "image/png" });
 // }
 
-const conn_str =
-  "mongodb+srv://khushib2013:4oMTYIILQEPA1ZOt@pictochat.gw69d9a.mongodb.net/?retryWrites=true&w=majority&appName=Pictochat";
+const conn_str = process.env.MONGO_STR;
 function DrawingComponent({ onExport, initialImageDataUrl }) {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);

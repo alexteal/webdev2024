@@ -1,27 +1,38 @@
 "use client";
 import Link from "next/link";
-import React from "react"; // Removed unused imports
-import { useAuth } from "../Auth/AuthContext"; // Only import what's used
+import { useEffect, useState } from 'react';
+import { useAuth } from "../../components/Auth/index";
 import styles from "./Header.module.css";
+
 function Header() {
-  const { username, isAuthenticated, toggleAuth } = useAuth();
+  const { isLoggedIn, logout } = useAuth();
+  const [clientSide, setClientSide] = useState(false);
 
-  ///?? i waas having a lot of issues with ^^ This shit.
+  useEffect(() => {
+    // Enable client-side specific rendering logic
+    setClientSide(true);
+  }, []);
 
-  // Dynamic greeting based on time of day (saw this online and thought it was
-  // cutsie 😊)
+
+  useEffect(() => {
+    // This effect will run whenever the isLoggedIn state changes
+    console.log("Logged in status:", isLoggedIn);
+  }, [isLoggedIn]);
+
+  // Dynamic greeting based on time of day
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return "Good Morning";
     if (hour < 18) return "Good Afternoon";
     return "Good Evening";
   };
-  const autoLoginAdmin = () => {
-    // Here you could also set any admin-specific state or perform additional
-    // actions
-    console.log("Logging in as admin automatically");
-    toggleAuth();
-  };
+
+
+  const logoutButton = () => {
+    logout();
+    window.location.reload();
+  }
+
   return (
     <header className={styles.header}>
       <div className={styles.logo}>
@@ -29,40 +40,29 @@ function Header() {
       </div>
       <nav className={styles.nav}>
         <Link href="/">Home</Link>
-        {isAuthenticated && <Link href="/">Dashboard</Link>}
-        {!isAuthenticated && (
-          <button className={styles.loginButton} onClick={autoLoginAdmin}>
-            AutoLogInAdminThing
-          </button>
-        )}
       </nav>
       <div className={styles.authStatus}>
         <h2>
-          {getGreeting()}, {isAuthenticated ? "User" : username}!
+        {getGreeting()}, {clientSide ? (isLoggedIn ? "Friend" : "Guest") : "Guest"}!
         </h2>
-        {isAuthenticated ? (
+        {isLoggedIn ? (
           <div>
             <Link href="/">
               <button
                 className={styles.logoutButton}
-                onClick={() => toggleAuth()}
+                onClick={() => logoutButton()}
               >
-                {" "}
                 Logout
               </button>
             </Link>
           </div>
         ) : (
           <div>
-            <Link
-              href="/CreateAccount
-       "
-              passHref
-            >
+            <Link href="/CreateAccount" passHref>
               <button className={styles.signupButton}>Sign up</button>
             </Link>
             <Link href="/Login" passHref>
-              <button className={styles.loginButton}>login</button>
+              <button className={styles.loginButton}>Login</button>
             </Link>
           </div>
         )}

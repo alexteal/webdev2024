@@ -9,12 +9,10 @@ import styles from "./page.module.css";
 export default function Home() {
   return (
     <>
-      <AuthProvider>
         <Header/>
         <main className={styles.main}>
           <ChatView />
         </main>
-      </AuthProvider>
     </>
   );
 }

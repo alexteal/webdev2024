@@ -39,12 +39,10 @@ export default async function signup(req, res) {
     );
     res.status(201).json({ success: true, userId: user._id.toString() });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Internal server error",
-        error: error.message,
-      });
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
   }
 }

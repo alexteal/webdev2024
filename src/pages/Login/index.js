@@ -2,33 +2,21 @@
 
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { AuthProvider, useAuth } from "../../components/Auth/AuthContext"; // Adjust the path as necessary
+import { useState } from "react";
+import { useAuth } from "../../components/Auth/index"; // Only import what's used
 import Header from "../../components/Header";
 import "./index.css";
-import { Form } from "react-router-dom";
+
 
 export default function Login() {
-  const { isAuthenticated, toggleAuth } = useAuth();
-  const [loginStatus, setLoginStatus] = useState(false);
+  const { login, isLoggedIn } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
-  function IndexPage() {
-    const [loginStatus, setLoginStatus] = useState(false);
-  }
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    // Temporary authentication check DELETE LATER
-    if (username === "admin" && password === "admin") {
-      toggleAuth(username); // Set the username in the auth context
-      setLoginStatus(true);
-      setTimeout(() => {
-        router.push("/");
-      }, 1000);
-    } else {
       try {
         const response = await fetch("/api/login", {
           method: "POST",
@@ -38,11 +26,10 @@ export default function Login() {
           body: JSON.stringify({ username, password }),
         });
         if (response.ok) {
-          toggleAuth(username); // Set the username in the auth context
-          setLoginStatus(true);
+          login(username, password); // Set the username in the auth context
           setTimeout(() => {
             router.push("/");
-          }, 1000);
+          }, 50);
         } else {
           setErrorMessage(
             "Your login information is incorrect. Do you have an account?",
@@ -52,20 +39,17 @@ export default function Login() {
         console.error("An error occurred during login:", error);
         setErrorMessage("Failed to log in, please try again.");
       }
-    }
   };
   return (
     <>
-      <AuthProvider>
         <div>
-          <Header loginStatus={loginStatus} />
+          <Header />
         </div>
-
         <div className="login-container">
           <h1>Login Here!</h1>
           <div className="login-status">
             <p>
-              {loginStatus ? "Logged in. You will be redirected shortly." : ""}
+              {isLoggedIn ? "Logged in. You will be redirected shortly." : ""}
             </p>
           </div>
           <form onSubmit={handleLogin}>
@@ -95,12 +79,12 @@ export default function Login() {
               type="submit"
             />
             <div className="error-message">{errorMessage}</div>
-            <button className="login-button">
-              <Link href="/CreateAccount">Signup</Link>
+            <Link href="/CreateAccount">
+            <button className="login-button">Signup
             </button>
+            </Link>
           </form>
         </div>
-      </AuthProvider>
     </>
   );
 }
