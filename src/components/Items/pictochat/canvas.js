@@ -7,16 +7,16 @@ import styles from "./canvas.css";
  * Convert canvas data URI to blob object for S3
  */
 function dataUriToBlob(dataUri) {
-  var binary = atob(dataURI.split(',')[1]);
+  var binary = atob(dataURI.split(",")[1]);
   var array = [];
-  for(var i = 0; i < binary.length; i++) {
-      array.push(binary.charCodeAt(i));
+  for (var i = 0; i < binary.length; i++) {
+    array.push(binary.charCodeAt(i));
   }
-  return new Blob([new Uint8Array(array)], {type: 'image/png'});
+  return new Blob([new Uint8Array(array)], { type: "image/png" });
 }
 
-function DrawingComponent({ onExport }) {
-const conn_str = 'mongodb+srv://khushib2013:4oMTYIILQEPA1ZOt@pictochat.gw69d9a.mongodb.net/?retryWrites=true&w=majority&appName=Pictochat'
+const conn_str =
+  "mongodb+srv://khushib2013:4oMTYIILQEPA1ZOt@pictochat.gw69d9a.mongodb.net/?retryWrites=true&w=majority&appName=Pictochat";
 function DrawingComponent({ onExport, initialImageDataUrl }) {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
@@ -89,15 +89,17 @@ function DrawingComponent({ onExport, initialImageDataUrl }) {
     // TODO: Convert to blob object so s3 can store the image, then pass that to mongoDB
     // Maybe you have to convert blob to file and then upload to S3?
     // const blob = dataUriToBlob(imageDataURL);
-  canvas.toBlob((blob) => {
-    if (blob === null) return;
-    S3.upload({
-      Key: "where/the/file/goes.png",
-      ContentType: "image/png",
-      Body: blob,
-    }, (err, data) => {});
-  }, "image/png");
-
+    canvas.toBlob((blob) => {
+      if (blob === null) return;
+      S3.upload(
+        {
+          Key: "where/the/file/goes.png",
+          ContentType: "image/png",
+          Body: blob,
+        },
+        (err, data) => {},
+      );
+    }, "image/png");
 
     // Save this to Mongo DB
     try {
@@ -107,7 +109,10 @@ function DrawingComponent({ onExport, initialImageDataUrl }) {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ "url": "www.fakeUrl.com", "userName": "testString" }),
+        body: JSON.stringify({
+          url: "www.fakeUrl.com",
+          userName: "testString",
+        }),
       });
 
       if (!res.ok) {
