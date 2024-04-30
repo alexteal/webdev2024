@@ -4,7 +4,7 @@ import React from "react"; // Removed unused imports
 import { useAuth } from "../Auth/AuthContext"; // Only import what's used
 import styles from "./Header.module.css";
 function Header() {
-  const { isAuthenticated, toggleAuth } = useAuth();
+  const { username, isAuthenticated, toggleAuth } = useAuth();
 
   ///?? i waas having a lot of issues with ^^ This shit.
 
@@ -38,7 +38,7 @@ function Header() {
       </nav>
       <div className={styles.authStatus}>
         <h2>
-          {getGreeting()}, {isAuthenticated ? "User" : "Guest"}!
+          {getGreeting()}, {isAuthenticated ? "User" : username}!
         </h2>
         {isAuthenticated ? (
           <div>

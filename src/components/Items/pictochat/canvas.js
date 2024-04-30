@@ -1,3 +1,4 @@
+import { connect } from "mongoose";
 import React, { useEffect, useRef, useState } from "react";
 import mainStyle from "../../../app/page.module.css";
 import styles from "./canvas.css";
@@ -15,6 +16,8 @@ function dataUriToBlob(dataUri) {
 }
 
 function DrawingComponent({ onExport }) {
+const conn_str = 'mongodb+srv://khushib2013:4oMTYIILQEPA1ZOt@pictochat.gw69d9a.mongodb.net/?retryWrites=true&w=majority&appName=Pictochat'
+function DrawingComponent({ onExport, initialImageDataUrl }) {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -41,6 +44,19 @@ function DrawingComponent({ onExport }) {
     const context = canvas.getContext("2d");
     context.fillStyle = "white"; // Set the fill color to white
     context.fillRect(0, 0, canvas.width, canvas.height); // Fill the canvas with white, effectively clearing it
+  };
+  useEffect(() => {
+    if (initialImageDataUrl) {
+      loadInitialImage(initialImageDataUrl);
+    }
+  }, [initialImageDataUrl]);
+
+  const loadInitialImage = (imageUrl) => {
+    const image = new Image();
+    image.src = imageUrl;
+    image.onload = () => {
+      contextRef.current.drawImage(image, 0, 0, 800, 300); // Adjust size as needed
+    };
   };
   const startDrawing = ({ nativeEvent }) => {
     const { offsetX, offsetY } = nativeEvent;
