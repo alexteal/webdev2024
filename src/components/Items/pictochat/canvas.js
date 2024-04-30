@@ -1,3 +1,4 @@
+import { connect } from "mongoose";
 import React, { useEffect, useRef, useState } from "react";
 import mainStyle from "../../../app/page.module.css";
 import styles from "./canvas.css";
@@ -15,6 +16,8 @@ function dataUriToBlob(dataUri) {
 }
 
 function DrawingComponent({ onExport }) {
+const conn_str = 'mongodb+srv://khushib2013:4oMTYIILQEPA1ZOt@pictochat.gw69d9a.mongodb.net/?retryWrites=true&w=majority&appName=Pictochat'
+function DrawingComponent({ onExport, initialImageDataUrl }) {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
