@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.565.0",
+    "@aws-sdk/s3-request-presigner": "^3.565.0",
     "aws-sdk": "^2.1608.0",
     "aws4": "^1.12.0",
     "bcrypt": "^5.1.1",
@@ -20,7 +22,8 @@
     "next": "14.1.4",
     "react": "^18",
     "react-cookie": "^7.1.4",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "sharp": "^0.33.3"
   },
   "devDependencies": {
     "eslint": "^8",
