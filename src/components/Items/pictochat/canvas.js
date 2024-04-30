@@ -1,4 +1,3 @@
-require('dotenv').config();
 import { connect } from "mongoose";
 import React, { useEffect, useRef, useState } from "react";
 import mainStyle from "../../../app/page.module.css";
