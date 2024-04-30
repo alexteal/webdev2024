@@ -1,4 +1,4 @@
-function ChatHistory({ imageUrls, user }) {
+function ChatHistory({ imageUrls, user, onImageSelect, deleteImage, disableButton }) {
   return (
     <div
       style={{
@@ -49,6 +49,32 @@ function ChatHistory({ imageUrls, user }) {
                   alt="Chat Drawing"
                 />
               </div>
+              <div style={disableButton ? { display: "none" } : { display: "flex" }}>
+              <button
+                onClick={() => onImageSelect(imageUrl)}
+                style={{
+                  padding: "5px 10px",
+                  fontSize: "0.8rem",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                  
+                }}
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => deleteImage(imageUrl)}
+                style={{
+                  padding: "5px 10px",
+                  fontSize: "0.8rem",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                }}
+              >
+                Delete
+              </button>
+              </div>
+              
               <div>
                 <h2
                   style={{

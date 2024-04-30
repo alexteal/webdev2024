@@ -42,6 +42,19 @@ function DrawingComponent({ onExport }) {
     context.fillStyle = "white"; // Set the fill color to white
     context.fillRect(0, 0, canvas.width, canvas.height); // Fill the canvas with white, effectively clearing it
   };
+  useEffect(() => {
+    if (initialImageDataUrl) {
+      loadInitialImage(initialImageDataUrl);
+    }
+  }, [initialImageDataUrl]);
+
+  const loadInitialImage = (imageUrl) => {
+    const image = new Image();
+    image.src = imageUrl;
+    image.onload = () => {
+      contextRef.current.drawImage(image, 0, 0, 800, 300); // Adjust size as needed
+    };
+  };
   const startDrawing = ({ nativeEvent }) => {
     const { offsetX, offsetY } = nativeEvent;
     contextRef.current.beginPath();

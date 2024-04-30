@@ -8,11 +8,32 @@ import styles from "./view.css";
 function ChatView() {
   const { isAuthenticated, toggleAuth } = useAuth(); // Call useAuth as a function and destructure
   const [imageDataUrl, setImageDataUrl] = useState(null);
+  const [currentImage, setCurrentImage] = useState(null); // State to track the current selected image
   const [chatHistoryUrls, setChatHistoryUrls] = useState([]);
-  const imageUrls = ["/image0.png", "/image1.png", "/image2.png"];
+  const [imageUrls, setImageUrls] = useState(["/image0.png", "/image1.png", "/image2.png"]);
+  
   const handleExport = (dataUrl) => {
     setImageDataUrl(dataUrl);
     setChatHistoryUrls((prevUrls) => [...prevUrls, dataUrl]);
+  };
+
+  const deleteImage = (imageUrl) => {
+    setImageUrls(prev => prev.filter(url => url !== imageUrl));
+    setChatHistoryUrls(prev => prev.filter(url => url !== imageUrl));
+  };
+  
+  const handleImageSelect = (imageUrl) => {
+    setCurrentImage(imageUrl); // Set the selected image to be the current image
+  };
+  const handleImageSave = (editedDataUrl) => {
+    const updatedUrls = chatHistoryUrls.map(url =>
+      url === currentImage ? editedDataUrl : url
+    );
+    setChatHistoryUrls(updatedUrls);
+    setCurrentImage(editedDataUrl); // Update current image to the new edited one
+  };
+  function pressImage() {
+    
   };
 
   return (
@@ -32,10 +53,12 @@ function ChatView() {
             <ChatHistory
               imageUrls={imageUrls.concat(chatHistoryUrls)}
               user="admin"
+              onImageSelect={handleImageSelect}
+              deleteImage={deleteImage}
             />
           </div>
           <div style={{ flexGrow: "0" }}>
-            <Canvas onExport={handleExport} />
+            <Canvas initialImageDataUrl={currentImage} onExport={handleExport} />
           </div>
         </div>
       ) : (
@@ -48,6 +71,7 @@ function ChatView() {
             <ChatHistory
               imageUrls={imageUrls.concat(chatHistoryUrls)}
               user="admin"
+              disableButton = "true"
             />
           </div>
         </>
