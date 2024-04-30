@@ -1,4 +1,4 @@
-function ChatHistory({ imageUrls, user, onImageSelect, deleteImage, disableButton }) {
+function ChatHistory({ imageUrls, onImageSelect, deleteImage, disableButton }) {
   return (
     <div
       style={{
@@ -85,7 +85,7 @@ function ChatHistory({ imageUrls, user, onImageSelect, deleteImage, disableButto
                     fontStyle: "italic", // Italicize text
                   }}
                 >
-                  from {user}
+                  from User
                 </h2>
               </div>
             </div>

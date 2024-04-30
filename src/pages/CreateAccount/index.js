@@ -4,11 +4,12 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import mainCSS from "../../app/page.module.css";
-import { AuthProvider } from "../../components/Auth/AuthContext";
+import { useAuth } from "../../components/Auth/index"; // Only import what's used
 import Header from "../../components/Header";
 import "./index.css";
 
 export default function CreateAccount() {
+  const { login, isLoggedIn } = useAuth();
   const [loginStatus, setLoginStatus] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -39,8 +40,13 @@ export default function CreateAccount() {
         // for god's sake
         body: JSON.stringify({ username: username, password: password }),
       });
+      if(response.status === 409) {
+        setErrorMessage("Username Taken! :3 pls pick another");
+        return;
+      }
       if (response.ok) {
         setLoginStatus(true);
+        login(username, password);
         console.log("OK");
       } else {
         // Handle errors
@@ -53,12 +59,11 @@ export default function CreateAccount() {
   };
   return (
     <>
-      <AuthProvider>
-        <Header loginStatus={loginStatus} />
+        <Header loginStatus={isLoggedIn} />
         <div className="login-container">
           <h1>Signup Here!</h1>
           <div className="login-status">
-            {loginStatus ? "Logged in. You will be redirected shortly." : ""}
+            {isLoggedIn ? "Logged in. You will be redirected shortly." : ""}
           </div>
           <input
             className="login-input"
@@ -78,11 +83,12 @@ export default function CreateAccount() {
             Sign up
           </button>
           <div className="error-message">{errorMessage}</div>
+          <Link href="/">
           <button className="login-button">
-            <Link href="/">Home</Link>
+           Home
           </button>
+          </Link>
         </div>
-      </AuthProvider>
     </>
   );
 }

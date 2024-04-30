@@ -1,17 +1,16 @@
 "use client";
-import React, { useState } from "react"; // Removed unused imports
-import { useAuth } from "@/components/Auth/AuthContext"; // Only import what's used
-import ChatHistory from "./chathistory";
+import { useAuth } from "@/components/Auth/index"; // Only import what's used
+import React, { useEffect, useState } from "react"; // Removed unused imports
 import Canvas from "../pictochat/canvas";
+import ChatHistory from "./chathistory";
 import styles from "./view.css";
 
 function ChatView() {
-  const { isAuthenticated, toggleAuth } = useAuth(); // Call useAuth as a function and destructure
+  const { isLoggedIn } = useAuth(); // Call useAuth as a function and destructure
   const [imageDataUrl, setImageDataUrl] = useState(null);
   const [currentImage, setCurrentImage] = useState(null); // State to track the current selected image
   const [chatHistoryUrls, setChatHistoryUrls] = useState([]);
   const [imageUrls, setImageUrls] = useState(["/image0.png", "/image1.png", "/image2.png"]);
-  
   const handleExport = (dataUrl) => {
     setImageDataUrl(dataUrl);
     setChatHistoryUrls((prevUrls) => [...prevUrls, dataUrl]);
@@ -46,13 +45,13 @@ function ChatView() {
         position: "relative",
       }}
     >
-      {isAuthenticated ? (
+      {isLoggedIn ? (
         <div>
           {" "}
           <div>
             <ChatHistory
               imageUrls={imageUrls.concat(chatHistoryUrls)}
-              user="admin"
+              user="user"
               onImageSelect={handleImageSelect}
               deleteImage={deleteImage}
             />
