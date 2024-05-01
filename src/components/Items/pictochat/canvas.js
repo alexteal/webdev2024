@@ -94,20 +94,19 @@ function DrawingComponent({ onExport, initialImageDataUrl }) {
     const blob = await response.blob();
     // Create form data to send blob
     const formData = new FormData();
-    formData.append("dataUri", blob);
-    formData.append("bucketName", process.env.AWS_BUCKET_NAME);
-    formData.append("objectKey", `${Date.now()}`);
-    // Send POST request to /api/s3
+    formData.append("image", blob);
+    formData.append("imageName", `${Date.now()}`);
+    // Send POST request to /api/upload
     try {
-      const res = await fetch("/api/s3", {
+      const res = await fetch("/api/upload", {
         method: "POST",
         body: formData,
       });
       if (!res.ok) {
         throw new Error(res.status.toString());
       }
-      // Get the URL of the uploaded image
-      const { url } = await res.json();
+      // Get the ID of the uploaded image
+      const { id } = await res.json();
       // Save this to Mongo DB
       const resMongo = await fetch("/api/drawings", {
         method: "POST",
@@ -116,7 +115,7 @@ function DrawingComponent({ onExport, initialImageDataUrl }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          url: url,
+          imageId: id,
           userName: "testuser",
         }),
       });
@@ -127,6 +126,7 @@ function DrawingComponent({ onExport, initialImageDataUrl }) {
       console.log(e);
     }
   };
+
   const downloadAndExport = () => {
     const canvas = canvasRef.current;
     const imageDataURL = canvas.toDataURL("image/png");

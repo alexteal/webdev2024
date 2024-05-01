@@ -1,73 +1,31 @@
-import { NextResponse } from "next/server";
-import { v4 as uuid } from "uuid";
-import {
-  S3Client,
-  PutObjectCommand,
-  GetObjectCommand,
-} from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { config } from "next/config";
-import sharp from "sharp";
-const { serverRuntimeConfig } = config();
-const s3Client = new S3Client({
-  region: serverRuntimeConfig.AWS_REGION,
-  credentials: {
-    accessKeyId: serverRuntimeConfig.AWS_ACCESSKEY_ID,
-    secretAccessKey: serverRuntimeConfig.AWS_ACCESSKEY_SECRET,
-  },
-});
-
-async function uploadImageToS3(file, fileName, type) {
-  //   const resizedImageBuffer = await sharp(file)
-  //     .resize(400, 500) // Specify your desired width or height for resizing
-  //     .toBuffer();
-
-  const params = {
-    Bucket: process.env.AWS_BUCKET_NAME,
-    Key: `${Date.now()}-${fileName}`,
-    Body: file,
-    ContentType: type, // Change the content type accordingly
-  };
-
-  const command = new PutObjectCommand(params);
-  const res = await s3Client.send(command);
-
-  const getCommand = new GetObjectCommand(params);
-  const url = await getSignedUrl(s3Client, getCommand, { expiresIn: 3600 });
-
-  return url;
-}
-
-export default async function handler(request, response) {
-  const { method } = request;
-
-  switch (method) {
-    case "POST":
-      try {
-        const formData = await request.formData();
-        console.log(formData, "Form data");
-        const file = formData.get("file");
-        if (!file) {
-          return NextResponse.json(
-            { error: "File blob is required." },
-            { status: 400 },
-          );
-        }
-
-        const mimeType = file.type;
-        const fileExtension = mimeType.split("/")[1];
-
-        const buffer = Buffer.from(await file.arrayBuffer());
-        const url = await uploadImageToS3(
-          buffer,
-          uuid() + "." + fileExtension,
-          mimeType,
-        );
-
-        return NextResponse.json({ success: true, url });
-      } catch (error) {
-        console.error("Error uploading image:", error);
-        NextResponse.json({ message: "Error uploading image" });
-      }
+import { dbConnect } from "@/app/lib/db";
+import { GridFSBucket, ObjectID } from "mongodb";
+import { Readable } from "stream";
+export default async function upload(req, res) {
+  if (req.method !== "POST") {
+    res.setHeader("Allow", ["POST"]);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
+    return;
   }
+  await dbConnect();
+  const bucket = new GridFSBucket(dbConnect, {
+    bucketName: "images",
+  });
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return res.status(400).send("No files were uploaded.");
+  }
+  let image = req.files.image;
+  let imageName = req.body.imageName;
+  let readableImageStream = new Readable();
+  readableImageStream.push(image.data);
+  readableImageStream.push(null);
+  let uploadStream = bucket.openUploadStream(imageName);
+  let id = uploadStream.id;
+  readableImageStream.pipe(uploadStream);
+  uploadStream.on("error", () => {
+    return res.status(500).send("Could not upload the file");
+  });
+  uploadStream.on("finish", () => {
+    return res.status(201).send({ success: true, id: id });
+  });
 }
