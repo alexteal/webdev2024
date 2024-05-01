@@ -2,6 +2,8 @@ import { connect } from "mongoose";
 import React, { useEffect, useRef, useState } from "react";
 import mainStyle from "../../../app/page.module.css";
 import styles from "./canvas.css";
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { getSignedUrl} from '@aws-sdk/s3-request-presigner'
 
 /**
  * Convert canvas data URI to blob object for S3
@@ -89,16 +91,25 @@ function DrawingComponent({ onExport, initialImageDataUrl }) {
     // TODO: Convert to blob object so s3 can store the image, then pass that to mongoDB
     // Maybe you have to convert blob to file and then upload to S3?
     // const blob = dataUriToBlob(imageDataURL);
-    canvas.toBlob((blob) => {
-      if (blob === null) return;
-      S3.upload(
-        {
-          Key: "where/the/file/goes.png",
-          ContentType: "image/png",
-          Body: blob,
-        },
-        (err, data) => {},
-      );
+
+    let imageUrl = "";
+    canvas.toBlob(async (blob) => {
+      const client = new S3Client({});
+
+      const command = new PutObjectCommand({
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: `${Date.now()}`,
+        Body: blob,
+        ContentType: "image/png",
+      });
+      
+      imageUrl = getSignedUrl(client, command, { expiresIn: 3600 });
+      try {
+        const response = await client.send(command);
+        console.log(response);
+      } catch (err) {
+        console.error(err);
+      }
     }, "image/png");
 
     // Save this to Mongo DB
@@ -110,8 +121,8 @@ function DrawingComponent({ onExport, initialImageDataUrl }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          url: "www.fakeUrl.com",
-          userName: "testString",
+          url: imageUrl,
+          userName: "testuser",
         }),
       });
 
