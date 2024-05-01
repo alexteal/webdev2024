@@ -7,25 +7,30 @@ export default async function upload(req, res) {
     res.status(405).end(`Method ${req.method} Not Allowed`);
     return;
   }
-  await dbConnect();
-  const bucket = new GridFSBucket(dbConnect, {
-    bucketName: "images",
-  });
-  if (!req.files || Object.keys(req.files).length === 0) {
-    return res.status(400).send("No files were uploaded.");
+  const { svgString, imageName } = req.body;
+  if (!svgString || !imageName) {
+    return res.status(400).send("SVG string or image name is missing.");
   }
-  let image = req.files.image;
-  let imageName = req.body.imageName;
-  let readableImageStream = new Readable();
-  readableImageStream.push(image.data);
-  readableImageStream.push(null);
-  let uploadStream = bucket.openUploadStream(imageName);
-  let id = uploadStream.id;
-  readableImageStream.pipe(uploadStream);
-  uploadStream.on("error", () => {
-    return res.status(500).send("Could not upload the file");
-  });
-  uploadStream.on("finish", () => {
-    return res.status(201).send({ success: true, id: id });
-  });
+  try {
+    const client = await dbConnect();
+    const db = client.db("mydb");
+    const bucket = new GridFSBucket(db, {
+      bucketName: "svgs",
+    });
+    let readableSVGStream = new Readable();
+    readableSVGStream.push(svgString);
+    readableSVGStream.push(null);
+    let uploadStream = bucket.openUploadStream(imageName);
+    let id = uploadStream.id;
+    readableSVGStream.pipe(uploadStream);
+    uploadStream.on("error", () => {
+      return res.status(500).send("Could not upload the SVG");
+    });
+    uploadStream.on("finish", () => {
+      client.close();
+      return res.status(201).send({ success: true, id: id });
+    });
+  } catch (error) {
+    return res.status(500).send("Could not connect to the database");
+  }
 }

@@ -86,26 +86,25 @@ function DrawingComponent({ onExport, initialImageDataUrl }) {
 
   const exportToImage = async () => {
     const canvas = canvasRef.current;
-    const imageDataURL = canvas.toDataURL("image/png");
-    onExport(imageDataURL); // Pass the image data URL to the parent component
+    const svgString = new XMLSerializer().serializeToString(canvas);
+    onExport(svgString); // Pass the SVG string to the parent component
     clearCanvas(); // Clear the canvas after exporting
-    // Convert data URL to blob
-    const response = await fetch(imageDataURL);
-    const blob = await response.blob();
-    // Create form data to send blob
-    const formData = new FormData();
-    formData.append("image", blob);
-    formData.append("imageName", `${Date.now()}`);
     // Send POST request to /api/upload
     try {
       const res = await fetch("/api/upload", {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          svgString: svgString,
+          imageName: `${Date.now()}`,
+        }),
       });
       if (!res.ok) {
         throw new Error(res.status.toString());
       }
-      // Get the ID of the uploaded image
+      // Get the ID of the uploaded SVG
       const { id } = await res.json();
       // Save this to Mongo DB
       const resMongo = await fetch("/api/drawings", {
