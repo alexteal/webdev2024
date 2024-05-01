@@ -1,0 +1,56 @@
+/* login.css */
+.admin-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+.admin-container form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.admin-container ul {
+  list-style-type: none;
+  padding: 0;
+}
+*:hover {
+  transition: all 0.3s ease;
+}
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Use the full height of the viewport */
+  background-color: #f5f5f5; /* Light grey background */
+}
+
+.login-input {
+  padding: 10px;
+  margin: 10px 0; /* 10px top & bottom, 0 left & right */
+  border: 1px solid #ddd; /* Light grey border */
+  border-radius: 5px; /* Rounded corners */
+  width: 300px; /* Fixed width for inputs */
+}
+
+.login-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff; /* Bootstrap primary blue */
+  color: white;
+  cursor: pointer;
+  width: 320px; /* Slightly wider than input to account for padding */
+  margin-top: 10px; /* Space above the button */
+}
+
+.login-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.error-message {
+  color: #dc3545; /* Bootstrap danger color */
+  margin-top: 10px;
+}
