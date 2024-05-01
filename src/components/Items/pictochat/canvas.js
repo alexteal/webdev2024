@@ -1,55 +1,13 @@
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { connect } from "mongoose";
 import React, { useEffect, useRef, useState } from "react";
+
 import mainStyle from "../../../app/page.module.css";
+
 import styles from "./canvas.css";
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { getSignedUrl} from '@aws-sdk/s3-request-presigner'
 
-const AWS = require('aws-sdk');
-
-// Assuming environment variables are set for AWS credentials and region
-AWS.config.update({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: process.env.AWS_REGION
-});
-
-const s3 = new AWS.S3();
-
-
-function dataUriToBlob(dataUri) {
-  const binary = atob(dataUri.split(',')[1]);
-  const array = [];
-  for (let i = 0; i < binary.length; i++) {
-    array.push(binary.charCodeAt(i));
-  }
-  return new Blob([new Uint8Array(array)], { type: 'image/png' });
-}
-
-function uploadFileToS3(dataUri, bucketName, objectKey) {
-  const blobData = dataUriToBlob(dataUri);
-
-  const params = {
-    Bucket: bucketName,
-    Key: objectKey,
-    Body: blobData,
-    ContentType: 'image/png'
-  };
-
-  s3.putObject(params, function(err, data) {
-    if (err) {
-      console.log('Error uploading data: ', err);
-    } else {
-      console.log('Successfully uploaded data to ' + bucketName + '/' + objectKey);
-    }
-  });
-}
-
-
-
-
-
-
+const AWS = require("aws-sdk");
 
 /**
  * Convert canvas data URI to blob object for S3
@@ -125,54 +83,45 @@ function DrawingComponent({ onExport, initialImageDataUrl }) {
     contextRef.current.closePath();
     setIsDrawing(false);
   };
+
   const exportToImage = async () => {
     const canvas = canvasRef.current;
-    console.log(canvas);
     const imageDataURL = canvas.toDataURL("image/png");
     onExport(imageDataURL); // Pass the image data URL to the parent component
     clearCanvas(); // Clear the canvas after exporting
-
-    // Save it to S3
-    // TODO: Convert to blob object so s3 can store the image, then pass that to mongoDB
-    // Maybe you have to convert blob to file and then upload to S3?
-    // const blob = dataUriToBlob(imageDataURL);
-
-    let imageUrl = "";
-    canvas.toBlob(async (blob) => {
-      const client = new S3Client({});
-
-      const command = new PutObjectCommand({
-        Bucket: process.env.AWS_BUCKET_NAME,
-        Key: `${Date.now()}`,
-        Body: blob,
-        ContentType: "image/png",
-      });
-      
-      imageUrl = getSignedUrl(client, command, { expiresIn: 3600 });
-      try {
-        const response = await client.send(command);
-        console.log(response);
-      } catch (err) {
-        console.error(err);
-      }
-    }, "image/png");
-
-    // Save this to Mongo DB
+    // Convert data URL to blob
+    const response = await fetch(imageDataURL);
+    const blob = await response.blob();
+    // Create form data to send blob
+    const formData = new FormData();
+    formData.append("dataUri", blob);
+    formData.append("bucketName", process.env.AWS_BUCKET_NAME);
+    formData.append("objectKey", `${Date.now()}`);
+    // Send POST request to /api/s3
     try {
-      const res = await fetch("/api/drawings", {
+      const res = await fetch("/api/s3", {
+        method: "POST",
+        body: formData,
+      });
+      if (!res.ok) {
+        throw new Error(res.status.toString());
+      }
+      // Get the URL of the uploaded image
+      const { url } = await res.json();
+      // Save this to Mongo DB
+      const resMongo = await fetch("/api/drawings", {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          url: imageUrl,
+          url: url,
           userName: "testuser",
         }),
       });
-
-      if (!res.ok) {
-        throw new Error(res.status.toString());
+      if (!resMongo.ok) {
+        throw new Error(resMongo.status.toString());
       }
     } catch (e) {
       console.log(e);
@@ -210,6 +159,7 @@ function DrawingComponent({ onExport, initialImageDataUrl }) {
         backgroundColor: "#fff",
       }}
     >
+      {" "}
       <canvas
         className={styles.canvas}
         onMouseDown={startDrawing}
