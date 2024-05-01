@@ -5,20 +5,65 @@ import styles from "./canvas.css";
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl} from '@aws-sdk/s3-request-presigner'
 
+const AWS = require('aws-sdk');
+
+// Assuming environment variables are set for AWS credentials and region
+AWS.config.update({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION
+});
+
+const s3 = new AWS.S3();
+
+
+function dataUriToBlob(dataUri) {
+  const binary = atob(dataUri.split(',')[1]);
+  const array = [];
+  for (let i = 0; i < binary.length; i++) {
+    array.push(binary.charCodeAt(i));
+  }
+  return new Blob([new Uint8Array(array)], { type: 'image/png' });
+}
+
+function uploadFileToS3(dataUri, bucketName, objectKey) {
+  const blobData = dataUriToBlob(dataUri);
+
+  const params = {
+    Bucket: bucketName,
+    Key: objectKey,
+    Body: blobData,
+    ContentType: 'image/png'
+  };
+
+  s3.putObject(params, function(err, data) {
+    if (err) {
+      console.log('Error uploading data: ', err);
+    } else {
+      console.log('Successfully uploaded data to ' + bucketName + '/' + objectKey);
+    }
+  });
+}
+
+
+
+
+
+
+
 /**
  * Convert canvas data URI to blob object for S3
  */
-function dataUriToBlob(dataUri) {
-  var binary = atob(dataURI.split(",")[1]);
-  var array = [];
-  for (var i = 0; i < binary.length; i++) {
-    array.push(binary.charCodeAt(i));
-  }
-  return new Blob([new Uint8Array(array)], { type: "image/png" });
-}
+// function dataUriToBlob(dataUri) {
+//   var binary = atob(dataURI.split(",")[1]);
+//   var array = [];
+//   for (var i = 0; i < binary.length; i++) {
+//     array.push(binary.charCodeAt(i));
+//   }
+//   return new Blob([new Uint8Array(array)], { type: "image/png" });
+// }
 
-const conn_str =
-  "mongodb+srv://khushib2013:4oMTYIILQEPA1ZOt@pictochat.gw69d9a.mongodb.net/?retryWrites=true&w=majority&appName=Pictochat";
+const conn_str = process.env.MONGO_STR;
 function DrawingComponent({ onExport, initialImageDataUrl }) {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);

@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -6,6 +8,7 @@
   padding: 0 20px;
   background-color: rgb(145 145 145);
   color: #fff;
+  font-family: "VT323", monospace;
 }
 
 .logo h1 {
